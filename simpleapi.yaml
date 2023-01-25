@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simpleapi
+  namespace: development
+  labels:
+    app: simpleapi
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: simpleapi
+  template:
+    metadata:
+      labels:
+        app: simpleapi
+    spec:
+      containers:
+      - name: simpleapi-container
+        image: mehdibouzidi/simpleapi:latest
+        ports:
+        - containerPort: 8080
+        env:
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
